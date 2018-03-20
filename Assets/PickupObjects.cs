@@ -77,10 +77,6 @@ public class PickupObjects : MonoBehaviour {
             objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
             objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
         }
-        if (objectInHand.tag == "Cane")
-        {
-            objectInHand.GetComponent<BlindCane>().setIsHeld(false);
-        }
         objectInHand = null;
     }
 
@@ -92,10 +88,6 @@ public class PickupObjects : MonoBehaviour {
             if (collidingObject)
             {
                 GrabObject();
-                if (collidingObject.tag == "Cane")
-                {
-                    collidingObject.GetComponent<BlindCane>().setIsHeld(true);
-                }
             }
 
   
