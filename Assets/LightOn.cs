@@ -9,9 +9,14 @@ public class LightOn : MonoBehaviour {
 	public float reduction = 1.0f;
 
 	private Light thisLight;
+    Color activated_color;
+
+    public bool activated = false;
 
 	void Start()
 	{
+        activated_color = Color.green;
+
 		thisLight = GetComponent<Light> ();
 		thisLight.color = GetComponent<MeshRenderer> ().material.color;
 		thisLight.intensity = 0.0f;
@@ -33,5 +38,12 @@ public class LightOn : MonoBehaviour {
 	public void hitTriggered()
 	{
 		thisLight.intensity = maxIntensity;
+        thisLight.color = activated_color;
+        activated = true;
 	}
+
+    public bool isActived()
+    {
+        return activated;
+    }
 }
