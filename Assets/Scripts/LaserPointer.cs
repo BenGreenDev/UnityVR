@@ -72,12 +72,15 @@ public class LaserPointer : MonoBehaviour {
 
             if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 100, teleportMask))
             {
-                hitPoint = hit.point;
-                ShowLaser(hit);
+                if (hit.transform.gameObject.tag != "wall")
+                {
+                    hitPoint = hit.point;
+                    ShowLaser(hit);
 
-                reticle.SetActive(true);
-                teleportReticleTransform.position = hitPoint + teleportReticleOffset;
-                shouldTeleport = true;
+                    reticle.SetActive(true);
+                    teleportReticleTransform.position = hitPoint + teleportReticleOffset;
+                    shouldTeleport = true;
+                }
             }
         }
         else

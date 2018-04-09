@@ -90,3 +90,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxIntensity: 2
   reduction: 1
+  activated: 0

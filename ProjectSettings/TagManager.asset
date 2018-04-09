@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Cane
   - Cube
+  - wall
   layers:
   - Default
   - TransparentFX
