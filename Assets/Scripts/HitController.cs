@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HitController : MonoBehaviour {
 
-
 	public void hitTriggered()
 	{
 		Debug.Log("you hit somethin");
