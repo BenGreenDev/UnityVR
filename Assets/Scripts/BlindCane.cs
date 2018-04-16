@@ -72,42 +72,42 @@ public class BlindCane : MonoBehaviour
                 if (MyNormal == MyRayHit.transform.up)
                 {
                     hitDirection = HitDirection.Top;
-                    Debug.Log("TOP");
+                    //Debug.Log("TOP");
 
                     StartHapticVibration(deviceR, vibration_length, strength);
                 }
                 else if (MyNormal == -MyRayHit.transform.up)
                 {
                     hitDirection = HitDirection.Bottom;
-                    Debug.Log("BOTTOM");
+                    //Debug.Log("BOTTOM");
 
                     StartHapticVibration(deviceR, vibration_length, strength);
                 }
                 else if(MyNormal == MyRayHit.transform.forward)
                 {
                     hitDirection = HitDirection.Forward;
-                    Debug.Log("FORWARD");
+                    //Debug.Log("FORWARD");
 
                     StartHapticVibration(deviceR, vibration_length, strength);
                 }
                 else if(MyNormal == -MyRayHit.transform.forward)
                 {
                     hitDirection = HitDirection.Back;
-                    Debug.Log("BACK");
+                    //Debug.Log("BACK");
 
                     StartHapticVibration(deviceR, vibration_length, strength);
                 }
                 else if(MyNormal == MyRayHit.transform.right)
                 {
                     hitDirection = HitDirection.Right;
-                    Debug.Log("RIGHT");
+                    //Debug.Log("RIGHT");
 
                     StartHapticVibration(deviceR, vibration_length, strength);
                 }
                 else if(MyNormal == -MyRayHit.transform.right)
                 {
                     hitDirection = HitDirection.Left;
-                    Debug.Log("LEFT");
+                    //Debug.Log("LEFT");
 
                     StartHapticVibration(deviceR, vib_length, strength);
                 }
@@ -130,7 +130,7 @@ public class BlindCane : MonoBehaviour
 
         if (activeHapticCoroutines.ContainsKey(device))
         {
-            Debug.Log("This device is already vibrating");
+            //Debug.Log("This device is already vibrating");
             return;
         }
 
@@ -144,7 +144,7 @@ public class BlindCane : MonoBehaviour
 
         if (!activeHapticCoroutines.ContainsKey(device))
         {
-            Debug.Log("Could not find this device");
+            //Debug.Log("Could not find this device");
             return;
         }
         StopCoroutine(activeHapticCoroutines[device]);

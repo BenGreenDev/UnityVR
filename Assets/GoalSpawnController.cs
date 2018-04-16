@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.IO;
 
 public class GoalSpawnController : MonoBehaviour {
+
 
 	public GameObject goalPrefab;
 	[SerializeField]
@@ -19,8 +22,10 @@ public class GoalSpawnController : MonoBehaviour {
 	float timer;
 	bool triggerOnce;
 
-	// Use this for initialization
-	void Start () {
+    public string file_name_for_user = "GoalData.txt";
+
+    // Use this for initialization
+    void Start () {
 		timer = 0.0f;
 		triggerOnce = false;
 	}
@@ -37,11 +42,15 @@ public class GoalSpawnController : MonoBehaviour {
 
 	public void goalAchieved(int obstaclesHitOnWay)
 	{
-		var randomRotation = Quaternion.Euler (0, Random.Range (0, 360), 0);
+		var randomRotation = Quaternion.Euler (0, UnityEngine.Random.Range (0, 360), 0);
 		transform.rotation = randomRotation;
 
 		Vector3 raycastSourcePoint = transform.forward * radius;
 		bool newSpawnFound = false;
+
+        Debug.Log("Goal: " + objectivesReached + "Reached");
+        Debug.Log("Number of obstacles hit on the way: " + obstaclesHitOnWay);
+        printToTextFile(obstaclesHitOnWay);
 
 		while (!newSpawnFound) 
 		{
@@ -52,10 +61,26 @@ public class GoalSpawnController : MonoBehaviour {
 					GameObject new_instance = Instantiate (goalPrefab);
 					new_instance.transform.position = hit.point;
 					new_instance.transform.rotation = Quaternion.identity;
-					//TODO output the number of obstacles hit along the way!
+                    
 					newSpawnFound = true;
 				}			
 			} 
 		}
 	}
+
+    void printToTextFile(int obstaclesHitOnWay)
+    {
+        if (File.Exists(file_name_for_user))
+        {
+            var sr = File.CreateText(file_name_for_user);
+            sr.WriteLine("Goal: " + objectivesReached + " Reached in: " + timer);
+            sr.WriteLine("Number of obstacles hit on the way: " + obstaclesHitOnWay);
+            sr.Close();
+        }
+        else
+        {
+            Debug.Log("Could not Open the file: " + file_name_for_user + " for reading.");
+            return;
+        }
+    }
 }

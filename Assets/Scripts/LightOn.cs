@@ -40,7 +40,7 @@ public class LightOn : MonoBehaviour
 
 	public void hitTriggered()
 	{
-        Debug.Log("GREEN HIT");
+        //Debug.Log("GREEN HIT");
         GetComponent<Animator>().Play("Glow");
         //thisLight.intensity = maxIntensity;
         //thisLight.color = activated_color;
