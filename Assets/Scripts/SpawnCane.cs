@@ -3,78 +3,109 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
-public class SpawnCane : MonoBehaviour {
+public class SpawnCane : MonoBehaviour
+{
+    #region Serialized Variables
+    [SerializeField]
+    private SteamVR_Controller.Device device;
+    [SerializeField]
+    private GameObject canePrefab;
+    [SerializeField]
+    private bool caneSpawned = false;
+    [SerializeField]
+    private float cane_length_in_heads = 6.5f;
+    [SerializeField]
+    private float heads_in_height_ratio = 7.5f;
+    [SerializeField]
+    private float cane_length = 0.1f;
+    #endregion
 
-	public SteamVR_TrackedObject trackedObject = null;
-	public SteamVR_Controller.Device device;
-	public GameObject canePrefab;
-    public GameObject head;
-	private bool caneSpawned = false;
-    public float cane_length_in_heads = 6.5f;
-    public float heads_in_height_ratio = 7.5f;
+    #region Private Variables
+    private SteamVR_TrackedObject trackedObject = null;
+    private GameObject head;
+    private float distance_from_floor = 1.0f;
+    private float max_player_head_height;
+    #endregion
 
-    public float distance_from_floor = 1.0f;
-    public float cane_length = 0.1f;
-	// Use this for initialization
-	void Start () {
-		trackedObject = GetComponent<SteamVR_TrackedObject> ();
+    // Use this for initialization
+    void Start()
+    {
+        trackedObject = GetComponent<SteamVR_TrackedObject>();
         head = GameObject.FindGameObjectWithTag("MainCamera");
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//pool device
-		device = SteamVR_Controller.Input ((int)trackedObject.index);
+        max_player_head_height = head.transform.position.y;
+    }
 
-		if (device.GetTouchDown (SteamVR_Controller.ButtonMask.Trigger)
-		//	&& (device.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) 
-		)
-		{
+    // Update is called once per frame
+    void Update()
+    {
+        if (head.transform.position.y > max_player_head_height)
+        {
+            max_player_head_height = head.transform.position.y;
+        }
 
-			if (caneSpawned == false) 
-			{
+        // poll device
+        device = SteamVR_Controller.Input((int)trackedObject.index);
+
+        // if player pulls trigger
+        if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            // and cane is not allready spawned
+            if (caneSpawned == false)
+            {
+                // perform a raycast to the ground from the players head
                 RaycastHit hit;
 
                 Ray downRay = new Ray(head.transform.position, -Vector3.up);
                 if (Physics.Raycast(downRay, out hit))
                 {
+                    // if the raycast hits the floor
                     if (hit.transform.gameObject.tag == "Floor")
                     {
-                        distance_from_floor = head.transform.position.y -  hit.point.y;
+                        // get the distance of the head from the floor
+                        distance_from_floor = head.transform.position.y - hit.point.y;
                         Debug.Log("Distance from floor: " + distance_from_floor);
-                        cane_length = (distance_from_floor / heads_in_height_ratio) * cane_length_in_heads;
+                        // set cane length to the distance of the head from the floor
+
+                        // if the distance from the floor is less than 90% of the max height of the player recorded
+                        if (distance_from_floor < max_player_head_height * 0.90f)
+                        {
+                            // use the max player height to determine length of the cane
+                            cane_length = (max_player_head_height / heads_in_height_ratio) * cane_length_in_heads;
+                        }
+                        else
+                        {
+                            // use current player height to determine the length of the cane
+                            cane_length = (distance_from_floor / heads_in_height_ratio) * cane_length_in_heads;
+                        }
+
                         Debug.Log("cane_length" + cane_length);
                     }
                 }
 
-                Debug.Log ("Tried to spawn it");
-				Debug.Log ("Trigger depressed and Grip pressed");
+                Debug.Log("Tried to spawn it");
+                Debug.Log("Trigger depressed and Grip pressed");
 
-				GameObject newCane = Instantiate (canePrefab, transform.position, Quaternion.identity);
-
+                GameObject newCane = Instantiate(canePrefab, transform.position, Quaternion.identity);
                 Bounds bounds = newCane.GetComponent<MeshFilter>().mesh.bounds;
                 Vector3 size = bounds.size;
                 Debug.Log("Bounds size:" + size);
-                //  newCane.transform.localScale = new Vector3(newCane.transform.localScale.x, cane_length, newCane.transform.localScale.z);
+
+
                 newCane.transform.localScale = new Vector3(newCane.transform.localScale.x, cane_length * 0.5f, newCane.transform.localScale.z);
-               
-               //newCane.transform.position = transform.position;
+
                 newCane.transform.parent = gameObject.transform;
                 newCane.transform.localPosition = Vector3.zero;
-                //.6 z -.1 y
 
-                Quaternion rot = Quaternion.Euler(90,0,0);
-				newCane.transform.localRotation = rot;
+                Quaternion rot = Quaternion.Euler(90, 0, 0);
+                newCane.transform.localRotation = rot;
 
                 Vector3 locTrans = new Vector3(0.0f, -0.03f, (cane_length / 2) * 0.9f);
+
                 newCane.transform.localPosition = locTrans;
                 newCane.transform.tag = "Cane";
 
-				caneSpawned = true;
-			}
-				
-
-		}
-
-	}
+                caneSpawned = true;
+            }
+        }
+    }
 }
