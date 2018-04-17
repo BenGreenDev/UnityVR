@@ -10,8 +10,8 @@ public class SpawnCane : MonoBehaviour {
 	public GameObject canePrefab;
     public GameObject head;
 	private bool caneSpawned = false;
-
     public float cane_length_in_heads = 6.5f;
+    public float heads_in_height_ratio = 7.0f;
 
     public float distance_from_floor = 1.0f;
     public float cane_length = 0.8f;
@@ -42,7 +42,7 @@ public class SpawnCane : MonoBehaviour {
                     if (hit.transform.gameObject.tag == "Floor")
                     {
                         distance_from_floor = hit.distance;
-                        cane_length = (distance_from_floor / 7) * cane_length_in_heads;
+                        cane_length = (distance_from_floor / heads_in_height_ratio) * cane_length_in_heads;
                     }
                 }
 
