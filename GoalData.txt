@@ -1,2 +1,2 @@
-Goal: 0 Reached in: 20.00511
+Goal: 0 Reached in: 20.00454
 Number of obstacles hit on the way: 0
