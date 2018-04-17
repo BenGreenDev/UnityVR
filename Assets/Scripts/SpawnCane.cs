@@ -11,11 +11,10 @@ public class SpawnCane : MonoBehaviour {
     public GameObject head;
 	private bool caneSpawned = false;
     public float cane_length_in_heads = 6.5f;
-    public float heads_in_height_ratio = 7.0f;
+    public float heads_in_height_ratio = 7.5f;
 
     public float distance_from_floor = 1.0f;
-    public float cane_length = 0.8f;
-
+    public float cane_length = 0.1f;
 	// Use this for initialization
 	void Start () {
 		trackedObject = GetComponent<SteamVR_TrackedObject> ();
@@ -41,25 +40,33 @@ public class SpawnCane : MonoBehaviour {
                 {
                     if (hit.transform.gameObject.tag == "Floor")
                     {
-                        distance_from_floor = hit.distance;
+                        distance_from_floor = head.transform.position.y -  hit.point.y;
+                        Debug.Log("Distance from floor: " + distance_from_floor);
                         cane_length = (distance_from_floor / heads_in_height_ratio) * cane_length_in_heads;
+                        Debug.Log("cane_length" + cane_length);
                     }
                 }
 
-                    Debug.Log ("Tried to spawn it");
+                Debug.Log ("Tried to spawn it");
 				Debug.Log ("Trigger depressed and Grip pressed");
 
 				GameObject newCane = Instantiate (canePrefab, transform.position, Quaternion.identity);
-                newCane.transform.localScale = new Vector3(newCane.transform.localScale.x, cane_length, newCane.transform.localScale.z);
-                newCane.transform.position = transform.position;
-				newCane.transform.parent = gameObject.transform;
-				newCane.transform.localPosition = Vector3.zero;
-				//.6 z -.1 y
 
-				Quaternion rot = Quaternion.Euler(90,0,0);
+                Bounds bounds = newCane.GetComponent<MeshFilter>().mesh.bounds;
+                Vector3 size = bounds.size;
+                Debug.Log("Bounds size:" + size);
+                //  newCane.transform.localScale = new Vector3(newCane.transform.localScale.x, cane_length, newCane.transform.localScale.z);
+                newCane.transform.localScale = new Vector3(newCane.transform.localScale.x, cane_length * 0.5f, newCane.transform.localScale.z);
+               
+               //newCane.transform.position = transform.position;
+                newCane.transform.parent = gameObject.transform;
+                newCane.transform.localPosition = Vector3.zero;
+                //.6 z -.1 y
+
+                Quaternion rot = Quaternion.Euler(90,0,0);
 				newCane.transform.localRotation = rot;
 
-                Vector3 locTrans = new Vector3(0.0f, -0.03f, cane_length - 0.1f);
+                Vector3 locTrans = new Vector3(0.0f, -0.03f, (cane_length / 2) * 0.9f);
                 newCane.transform.localPosition = locTrans;
                 newCane.transform.tag = "Cane";
 

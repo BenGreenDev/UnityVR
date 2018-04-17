@@ -34,7 +34,7 @@ public class TriggerController : MonoBehaviour {
 		}
         else
         {
-            Debug.Log("collision failed");
+          //  Debug.Log("collision failed");
         }
 	}
 
