@@ -56,6 +56,7 @@ public class AmbientLightController : MonoBehaviour {
 				RenderSettings.reflectionIntensity -= Time.deltaTime* fadeSlowing;
 				RenderSettings.ambientLight = Color.Lerp(ambientColor, dimmedColor, 1.5f);
 				RenderSettings.skybox.color = Color.Lerp(skyboxColor, dimmedColor, 1.5f);
+                Debug.Log("GOING DOWN");
 			} 
 			else 
 			{

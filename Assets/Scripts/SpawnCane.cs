@@ -38,6 +38,7 @@ public class SpawnCane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (head.transform.position.y > max_player_head_height)
         {
             max_player_head_height = head.transform.position.y;
