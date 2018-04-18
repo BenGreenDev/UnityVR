@@ -7,12 +7,15 @@ using System.IO;
 public class GoalSpawnController : MonoBehaviour {
 
 
-	public GameObject goalPrefab;
+	public GameObject[] goals;
+	private GameObject activeGoal;
 	[SerializeField]
 	float radius = 0.0f;
 
 	[SerializeField]
 	int objectivesReached = 0;
+	int index = 0;
+	int maxIndex =0;
 
 	[SerializeField]
 	RaycastHit hit;
@@ -25,13 +28,18 @@ public class GoalSpawnController : MonoBehaviour {
     public string file_name_for_user = "GoalData.txt";
 
     // Use this for initialization
-    void Start () {
+    void Start () 
+	{
 		timer = 0.0f;
 		triggerOnce = false;
+		goals = GameObject.FindGameObjectsWithTag ("Goal");
+		activeGoal = goals [0];
+		maxIndex = goals.Length - 1;
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		timer += Time.deltaTime;
 		if (timer >= delay && triggerOnce == false)
 		{
@@ -42,30 +50,18 @@ public class GoalSpawnController : MonoBehaviour {
 
 	public void goalAchieved(int obstaclesHitOnWay)
 	{
-		var randomRotation = Quaternion.Euler (0, UnityEngine.Random.Range (0, 360), 0);
-		transform.rotation = randomRotation;
+		Debug.Log("Goal: " + objectivesReached + "Reached");
+		Debug.Log("Number of obstacles hit on the way: " + obstaclesHitOnWay);
+		printToTextFile(obstaclesHitOnWay);
 
-		Vector3 raycastSourcePoint = transform.forward * radius;
-		bool newSpawnFound = false;
-
-        Debug.Log("Goal: " + objectivesReached + "Reached");
-        Debug.Log("Number of obstacles hit on the way: " + obstaclesHitOnWay);
-        printToTextFile(obstaclesHitOnWay);
-
-		while (!newSpawnFound) 
+		activeGoal.GetComponent<GoalActivityController> ().setActive (false);
+		index++;
+		if (index > maxIndex) 
 		{
-			if (Physics.Raycast (raycastSourcePoint, Vector3.down, out hit)) 
-			{
-				if (hit.transform.gameObject.tag == "Floor")
-				{
-					GameObject new_instance = Instantiate (goalPrefab);
-					new_instance.transform.position = hit.point;
-					new_instance.transform.rotation = Quaternion.identity;
-                    
-					newSpawnFound = true;
-				}			
-			} 
+			//TODO - Alternatively, end experience?
+			index = 0;
 		}
+		goals[index].GetComponent<GoalActivityController> ().setActive (true);
 	}
 
     void printToTextFile(int obstaclesHitOnWay)

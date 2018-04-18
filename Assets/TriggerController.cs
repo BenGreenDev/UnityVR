@@ -29,8 +29,6 @@ public class TriggerController : MonoBehaviour {
             headcollider.reset();
 
             Debug.Log("Reset head collider");
-
-			Destroy (this.gameObject);
 		}
         else
         {

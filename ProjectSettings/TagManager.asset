@@ -10,6 +10,7 @@ TagManager:
   - GoalSpawner
   - Floor
   - PlayerBody
+  - Goal
   layers:
   - Default
   - TransparentFX
