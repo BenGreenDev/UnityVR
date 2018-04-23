@@ -7,10 +7,13 @@ public class TriggerController : MonoBehaviour {
 	GoalSpawnController controller;
     public HeadCollider headcollider;
 
+    AudioSource audio;
+
 	// Use this for initialization
 	void Start () {
 		controller = GameObject.FindGameObjectWithTag ("GoalSpawner").GetComponent<GoalSpawnController>();
         headcollider = GameObject.Find("HeadCollider").GetComponent<HeadCollider>();
+        audio = gameObject.GetComponent<AudioSource>();
 	}
 
 	void OnTriggerEnter(Collider col)
@@ -24,7 +27,8 @@ public class TriggerController : MonoBehaviour {
 		{
             //TODO replace this 0 and all other function calls to "goal achieved" with the amount of objects 
             //hit along the way from the player's collider or wherever it's stored.
-            
+
+            audio.Play();
 			controller.goalAchieved(headcollider.getNumObstaclesHit());
             headcollider.reset();
 
