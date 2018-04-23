@@ -35,17 +35,19 @@ public class GoalSpawnController : MonoBehaviour {
 		goals = GameObject.FindGameObjectsWithTag ("Goal");
 		activeGoal = goals [0];
 		maxIndex = goals.Length - 1;
-	}
 
-	// Update is called once per frame
-	void Update () 
-	{
-		timer += Time.deltaTime;
-		if (timer >= delay && triggerOnce == false)
-		{
-			triggerOnce = true;
-			goalAchieved (0);
-		}
+        //Set to false
+        for(int i = 0; i < goals.Length; i++)
+        {
+            goals[i].GetComponent<GoalActivityController>().setActive(false);
+        }
+
+        activeGoal.GetComponent<GoalActivityController>().setActive(true);
+    }
+
+    // Update is called once per frame
+    void Update ()
+    { 
 	}
 
 	public void goalAchieved(int obstaclesHitOnWay)
@@ -55,13 +57,17 @@ public class GoalSpawnController : MonoBehaviour {
 		printToTextFile(obstaclesHitOnWay);
 
 		activeGoal.GetComponent<GoalActivityController> ().setActive (false);
+
 		index++;
+
 		if (index > maxIndex) 
 		{
-			//TODO - Alternatively, end experience?
 			index = 0;
 		}
+
 		goals[index].GetComponent<GoalActivityController> ().setActive (true);
+        activeGoal = goals[index];
+
 	}
 
     void printToTextFile(int obstaclesHitOnWay)
