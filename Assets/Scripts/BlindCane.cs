@@ -51,7 +51,7 @@ public class BlindCane : MonoBehaviour
          //   .hitTriggered();
         
         RaycastHit MyRayHit;
-        Vector3 direction = (transform.position - col.transform.position).normalized;
+        Vector3 direction = (col.transform.position - transform.position).normalized;
         Ray MyRay = new Ray(transform.position, direction);
 
         float strength = col.impulse.magnitude + deviceR.velocity.magnitude / 1.5f;
@@ -63,9 +63,15 @@ public class BlindCane : MonoBehaviour
         if (Physics.Raycast(MyRay, out MyRayHit))
         {
 
-            if (MyRayHit.collider != null)
+            if(col.gameObject.GetComponent<Rigidbody>().constraints == RigidbodyConstraints.FreezeAll)
             {
+                strength = col.gameObject.GetComponent<Rigidbody>().mass;
 
+                StartHapticVibration(deviceR, vib_length, strength);
+
+            }
+            else if (MyRayHit.collider != null)
+            {
                 Vector3 MyNormal = MyRayHit.normal;
                 MyNormal = MyRayHit.transform.TransformDirection(MyNormal);
 
